@@ -4,40 +4,19 @@ package pl.game.of.life;
  * Created by pbartoch on 13.04.2017.
  */
 public class Cell {
-    private int x;
-    private int y;
 
-    public int getX() {
-        return x;
+    private boolean state;
+
+    public Cell(boolean state) {
+        this.state = state;
     }
 
-    public void setX(int x) {
-        this.x = x;
+    public boolean getState() {
+        return state;
     }
 
-    public int getY() {
-        return y;
+    public void setNewState(int numOfNeighbors) {
+        this.state = numOfNeighbors <= 1 || numOfNeighbors >= 4 ? false : true;
     }
 
-    public void setY(int y) {
-        this.y = y;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Cell)) return false;
-
-        Cell cell = (Cell) o;
-
-        if (x != cell.x) return false;
-        return y == cell.y;
-    }
-
-    @Override
-    public int hashCode() {
-        int result = x;
-        result = 31 * result + y;
-        return result;
-    }
 }
