@@ -5,6 +5,8 @@ package pl.game.of.life;
  */
 public class Cell {
 
+    public static final boolean DEAD = false;
+    public static final boolean ALIVE = true;
     private boolean state;
 
     public Cell(boolean state) {
@@ -15,8 +17,14 @@ public class Cell {
         return state;
     }
 
-    public void setNewState(int numOfNeighbors) {
-        this.state = numOfNeighbors <= 1 || numOfNeighbors >= 4 ? false : true;
+    public void updateCellState(int numOfNeighbors) {
+        if (state == ALIVE) {
+            this.state = numOfNeighbors <= 1 || numOfNeighbors >= 4 ? DEAD : ALIVE;
+        } else {
+            this.state = numOfNeighbors <= 1 || numOfNeighbors >= 4 || numOfNeighbors == 2 ? DEAD : ALIVE;
+        }
     }
 
+    public int countNeighbors() {
+    }
 }
