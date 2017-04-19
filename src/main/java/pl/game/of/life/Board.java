@@ -5,7 +5,7 @@ package pl.game.of.life;
  */
 public class Board {
 
-    private Cell[][] boardOfCells;
+    private Cell[][] boardOfCells; // todo: think if i want to use cells or just states
 
     public Board(boolean[][] initialStates) {
         boardOfCells = new Cell[initialStates.length][initialStates[0].length];
@@ -35,23 +35,29 @@ public class Board {
     public void update() {
         for (int row = 0; row < boardOfCells.length; row++) {
             for (int col = 0; col < boardOfCells[0].length; col++) {
-                boardOfCells[row][col].updateCellState(getNumOfNeighbors());
+                int numberOfNeighbors = countNeighbors(boardOfCells,row,col);
+                boardOfCells[row][col].updateCellState(numberOfNeighbors);
             }
         }
     }
 
-    private int getNumOfNeighbors() {
-        return 0;
-    }
+    private int countNeighbors(Cell[][] boardOfCells, int row, int col) { // todo: out of boundary exception fix it
+        int rowBack = row -1;
+        int rowForward = row +1;
+        int colBack = col -1;
+        int colForward = col +1;
+        int neighbors = 0;
 
-    public int[][] countAllNeighbors(Cell[][] boardOfCells) {
-        int[][] countedNeighbors = new int[boardOfCells.length][boardOfCells[0].length];
-        for (int row = 0; row < countedNeighbors.length; row++) {
-            for (int col = 0; col < countedNeighbors[0].length; row++) {
-                countedNeighbors[row][col] = boardOfCells[row][col].countNeighbors();
+        for (int r = rowBack; r <= rowForward; r++) {
+            for (int c = colBack; c <= colForward; c++) {
+                boolean mainCellState = boardOfCells[row][col].getState();
+                boolean neighborCellState = boardOfCells[r][c].getState();
+                if (mainCellState == neighborCellState) {
+                    neighbors++;
+                }
             }
         }
-        return countedNeighbors;
+        return neighbors;
     }
 
 }

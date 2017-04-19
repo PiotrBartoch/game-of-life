@@ -55,30 +55,6 @@ public class BoardTest {
         assertThat(updatedState[1][1]).isEqualTo(DEAD);
     }
 
-    @Test
-    public void should_count_all_neighbors() {
-        boolean[][] initialState = {
-                {O, O, O, O, O, O, O, O, O},
-                {O, O, X, O, O, O, X, O, O},
-                {O, X, O, O, O, O, O, X, O},
-                {O, O, X, O, O, O, O, X, O},
-                {O, O, O, O, O, O, O, O, O},
-        };
-
-        int[][] numberOfNeighborsArray = {
-                {0,1,1,1,0,1,1,1,0},
-                {1,2,1,1,0,1,1,2,1},
-                {1,2,3,2,0,1,3,2,2},
-                {1,2,1,1,0,0,2,1,2},
-                {0,1,1,1,0,0,1,1,1},
-        };
-
-        Board board = new Board(initialState);
-        int[][] neighborsCounted = board.countAllNeighbors(board.getBoardOfCells());
-
-        assertThat(neighborsCounted).containsExactly(numberOfNeighborsArray);
-
-    }
 
     @Test
     public void should_change_state() {
