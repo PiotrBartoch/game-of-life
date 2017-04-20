@@ -19,7 +19,7 @@ public class Cell {
 
     public void updateCellState(int numOfNeighbors) {
         if (state == ALIVE) {
-            this.state = numOfNeighbors <= 1 || numOfNeighbors >= 4 ? DEAD : ALIVE;
+            this.state = numOfNeighbors == 2 || numOfNeighbors == 3 ? ALIVE : DEAD;
         } else {
             this.state = numOfNeighbors == 3 ? ALIVE : DEAD;
         }
