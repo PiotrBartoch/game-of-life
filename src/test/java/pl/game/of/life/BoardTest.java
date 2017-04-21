@@ -24,36 +24,27 @@ public class BoardTest {
                 {O, O, O, O, O},
         };
         Board board = new Board(initialState);
-        assertThat(board.getBoardState()).containsExactly(initialState);
-    }
-
-    @Test
-    public void should_ignore_cell_when_it_sticks_with_borders() {
-
-        boolean[][] initialState = {
-                {X, O, X, O}, /** row:0 col: 0 ALIVE -> ALIVE */
-                {O, X, O, X},
-                {O, O, O, O},
-        };
-        Board board = new Board(initialState);
-        board.update();
-        boolean[][] newState = board.getBoardState();
-
-        assertThat(newState[0][0]).isEqualTo(ALIVE);
-
+        assertThat(board.getCurrentStates()).containsExactly(initialState);
     }
 
     @Test
     public void should_update_cell_when_neighbors_are_on_ignored_line() {
+        // given
         boolean[][] initialState = {
                 {X, O, X, O},
                 {O, X, O, X}, /** row: 1 col: 1 ALIVE -> ALIVE and row: 1 col: 2 DEAD -> ALIVE */
                 {O, O, O, O},
         };
         Board board = new Board(initialState);
-        board.update();
-        boolean[][] newState = board.getBoardState();
 
+        // when
+        board.update();
+
+        // then
+        boolean[][] newState = board.getCurrentStates();
+
+        assertThat(newState[0][0]).isEqualTo(DEAD);
+        assertThat(newState[2][2]).isEqualTo(DEAD);
         assertThat(newState[1][1]).isEqualTo(ALIVE);
         assertThat(newState[1][2]).isEqualTo(ALIVE);
     }
@@ -73,10 +64,9 @@ public class BoardTest {
         };
         Board board = new Board(initialState);
         board.update();
-        boolean[][] newState = board.getBoardState();
+        boolean[][] newState = board.getCurrentStates();
 
         assertThat(newState[2][2]).isEqualTo(ALIVE);
-//        assertThat(newState[1][2]).isEqualTo(ALIVE);
     }
 
     @Test
@@ -97,7 +87,7 @@ public class BoardTest {
          }; */
         Board board = new Board(initialState);
         board.update();
-        boolean[][] newState = board.getBoardState();
+        boolean[][] newState = board.getCurrentStates();
 
         assertThat(newState[2][2]).isEqualTo(ALIVE);
     }
@@ -133,8 +123,8 @@ public class BoardTest {
         Board board = new Board(initialState);
 
         board.update();
-//        assertThat(board.getBoardState()).containsExactly(secondState);
-        boolean[][] newState = board.getBoardState();
+//        assertThat(board.getCurrentStates()).containsExactly(secondState);
+        boolean[][] newState = board.getCurrentStates();
 
         assertThat(newState[2][1]).isEqualTo(ALIVE);
     }
