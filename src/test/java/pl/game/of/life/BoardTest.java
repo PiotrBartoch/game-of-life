@@ -16,7 +16,7 @@ public class BoardTest {
 
     @Test
     public void should_return_initial_state() {
-
+        // given
         boolean[][] initialState = {
                 {O, O, O, O, O},
                 {O, X, O, X, O},
@@ -24,11 +24,13 @@ public class BoardTest {
                 {O, O, O, O, O},
         };
         Board board = new Board(initialState);
+
+        // then
         assertThat(board.getCurrentStates()).containsExactly(initialState);
     }
 
     @Test
-    public void should_update_cell_when_neighbors_are_on_ignored_line() {
+    public void should_update_cells_when_neighbors_are_on_border_line() {
         // given
         boolean[][] initialState = {
                 {X, O, X, O},
@@ -49,13 +51,9 @@ public class BoardTest {
         assertThat(newState[1][2]).isEqualTo(ALIVE);
     }
 
-    /**
-     * ---------------------------above passes----------------------------------------------
-     */
-
-
     @Test
-    public void should_update_cell_when_neighbors_are_not_on_ignored_line() {
+    public void should_update_cell_when_neighbors_are_not_on_border_line() {
+        // given
         boolean[][] initialState = {
                 {O, O, O, O, O},
                 {O, X, O, X, O},
@@ -63,38 +61,19 @@ public class BoardTest {
                 {O, O, O, O, O},
         };
         Board board = new Board(initialState);
+
+        // when
         board.update();
+
+        // then
         boolean[][] newState = board.getCurrentStates();
-
-        assertThat(newState[2][2]).isEqualTo(ALIVE);
-    }
-
-    @Test
-    public void should_update_cell_when_it_does_not_touch_borders() {
-        boolean[][] initialState = {
-                {O, O, O, O, O},
-                {O, O, O, O, O},
-                {O, X, X, X, O}, // row: 2 col: 2 ALIVE -> DEAD
-                {O, O, O, O, O},
-                {O, O, O, O, O},
-        };
-        /** boolean[][] initialState = {
-         {O, O, O, O, O},
-         {O, O, O, O, O},
-         {O, O, X, O, O}, // row: 2 col: 2 ALIVE -> DEAD
-         {O, O, O, O, O},
-         {O, O, O, O, O},
-         }; */
-        Board board = new Board(initialState);
-        board.update();
-        boolean[][] newState = board.getCurrentStates();
-
         assertThat(newState[2][2]).isEqualTo(ALIVE);
     }
 
 
     @Test
     public void should_change_state() {
+        // given
         boolean[][] initialState = {
                 {O, O, O, O, O, O, O, O, O},
                 {O, O, X, O, O, O, X, O, O},
@@ -102,14 +81,6 @@ public class BoardTest {
                 {O, O, X, O, O, O, O, X, O},
                 {O, O, O, O, O, O, O, O, O},
         };
-
-        /**  boolean[][] initialState = {
-         {O, O, O, O, O, O, O, O, O},
-         {O, O, X, O, O, O, X, O, O},
-         {O, X, O, O, O, O, O, X, O},
-         {O, O, X, O, O, O, O, X, O},
-         {O, O, O, O, O, O, O, O, O},
-         }; */
 
 
         boolean[][] secondState = {
@@ -122,10 +93,10 @@ public class BoardTest {
         };
         Board board = new Board(initialState);
 
+        // when
         board.update();
-//        assertThat(board.getCurrentStates()).containsExactly(secondState);
-        boolean[][] newState = board.getCurrentStates();
 
-        assertThat(newState[2][1]).isEqualTo(ALIVE);
+        // then
+        assertThat(board.getCurrentStates()).containsExactly(secondState);
     }
 }

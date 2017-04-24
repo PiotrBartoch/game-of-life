@@ -5,8 +5,8 @@ package pl.game.of.life;
  */
 public class Board {
 
-    Cell[][] boardOfCells; // todo: think if i want to use cells or just states
-    Cell[][] currentState;
+    Cell[][] boardOfCells;
+    Cell[][] currentBoardState;
 
     int width;
     int height;
@@ -15,141 +15,63 @@ public class Board {
         width = initialStates[0].length;
         height = initialStates.length;
         boardOfCells = new Cell[height][width];
-        currentState = new Cell[height][width];
+        currentBoardState = new Cell[height][width];
 
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
                 boolean initialState = initialStates[row][col];
                 boardOfCells[row][col] = new Cell(initialState);
-                currentState[row][col] = new Cell(initialState);
+                currentBoardState[row][col] = new Cell(initialState);
             }
         }
     }
 
+//    public void runGame(boolean[][] initialStates, int gameLoop) {
+//        Board board = new Board(initialStates);
+//        for (int i = 0; i < gameLoop; i++) {
+//            for ()
+//        }
+//    }
+
     public boolean[][] getCurrentStates() {
-        boolean[][] cellsStates = new boolean[currentState.length][currentState[0].length];
-        for (int row = 0; row < cellsStates.length; row++) {
-            for (int col = 0; col < cellsStates[0].length; col++) {
-                cellsStates[row][col] = currentState[row][col].getState();
+        boolean[][] cellsStates = new boolean[height][width];
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
+                cellsStates[row][col] = currentBoardState[row][col].getState();
             }
         }
         return cellsStates;
     }
 
     public void update() {
-        for (int row = 0; row < boardOfCells.length; row++) {
-            for (int col = 0; col < boardOfCells[0].length; col++) {
-                int numberOfNeighbors = countNB(row, col);
-                currentState[row][col].updateCellState(numberOfNeighbors);
-            }
-        }
-    }
-
-    private int getNeighbors(int row, int col) {
-        int rowBack = row - 1;
-        int rowForward = row + 1;
-        int colBack = col - 1;
-        int colForward = col + 1;
-        int neighbors = 0;
-
-        /**Middle cells*/
-        if (row != 0 && row != boardOfCells.length - 1 && col != 0 && col != boardOfCells[0].length - 1) {
-            for (int r = rowBack; r <= rowForward; r++) {
-                for (int c = colBack; c <= colForward; c++) {
-                    neighbors = countNeighbors(row, col, neighbors, r, c);
-                }
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
+                int numberOfNeighbors = countNeighbors(row, col);
+                currentBoardState[row][col].updateCellState(numberOfNeighbors);
             }
         }
 
-        /**Corner cells*/
-        if (row == 0 && col == 0) { // upper left corner
-            for (int r = row; r <= rowForward; r++) {
-                for (int c = col; c <= colForward; c++) {
-                    neighbors = countNeighbors(row, col, neighbors, r, c);
-                }
-            }
-        }
-        if (row == 0 && col == boardOfCells[0].length - 1) { // upper right corner !!!!!!!!!!!!!!!!!!!!!!!!!!!!
-            for (int r = row; r <= rowForward; r++) {
-                for (int c = colBack; c <= col; c++) {
-                    neighbors = countNeighbors(row, col, neighbors, r, c);
-                }
-            }
-
-        }
-        if (row == boardOfCells.length - 1 && col == boardOfCells[0].length - 1) { // bottom right corner
-            for (int r = rowBack; r <= row; r++) {
-                for (int c = colBack; c <= col; c++) {
-                    neighbors = countNeighbors(row, col, neighbors, r, c);
-                }
-            }
-        }
-        if (row == boardOfCells.length - 1 && col == 0) { // bottom left corner
-            for (int r = rowBack; r <= row; r++) {
-                for (int c = col; c <= colForward; c++) {
-                    neighbors = countNeighbors(row, col, neighbors, r, c);
-                }
-            }
-        }
-
-        /**Border Cells*/
-        if (row == 0 && (1 <= col && col <= boardOfCells[0].length - 1)) { // upper border
-            for (int r = row; r <= rowForward; r++) {
-                for (int c = colBack; c <= colForward; c++) {
-                    neighbors = countNeighbors(row, col, neighbors, r, c);
-                }
-            }
-        }
-        if ((1 <= row && row <= boardOfCells.length - 1) && col == boardOfCells[0].length - 1) { // right border
-            for (int r = rowBack; r <= rowForward; r++) {
-                for (int c = colBack; c <= col; c++) {
-                    neighbors = countNeighbors(row, col, neighbors, r, c);
-                }
-            }
-        }
-        if (row == boardOfCells.length - 1 && (1 <= col && col <= boardOfCells[0].length - 1)) { // bottom border
-            for (int r = rowBack; r <= row; r++) {
-                for (int c = colBack; c <= colForward; c++) {
-                    neighbors = countNeighbors(row, col, neighbors, r, c);
-                }
-            }
-        }
-        if ((1 <= row && row <= boardOfCells.length - 1) && col == 0) { // left border
-            for (int r = rowBack; r <= rowForward; r++) {
-                for (int c = colBack; c <= col; c++) {
-                    neighbors = countNeighbors(row, col, neighbors, r, c);
-                }
-            }
-        }
-        return neighbors;
-    }
-
-    private int countNeighbors(int row, int col, int neighbors, int r, int c) {
-        if (r != row || c != col) {
-            boolean neighborCellState = boardOfCells[r][c].getState();
-            if (neighborCellState == true) {
-                neighbors++;
-            }
-        }
-        return neighbors;
     }
 
 
-    int countNB(int x, int y) {
-        int aliveNB = boardOfCells[x][y].getState() ? -1 : 0;
-        for (int r = x-1; r <= x+1; r++) {
-            for (int c = y-1; c <= y+1; c++) {
-                aliveNB += isAlive(r, c);
+    private int countNeighbors(int row, int col) {
+        /** if "main" cell is alive we initiate aliveNeighbors with -1. It's because in algorithm it checks itself too, but should not count itself, so we subtract it from sum. If its dead, it's  zero anyway.*/
+        int aliveNeighbors = boardOfCells[row][col].getState() ? -1 : 0;
+        /** iterate all cells around main cell*/
+        for (int r = row - 1; r <= row + 1; r++) {
+            for (int c = col - 1; c <= col + 1; c++) {
+                aliveNeighbors += isAlive(r, c);
             }
         }
-        return aliveNB;
+        return aliveNeighbors;
     }
 
     private int isAlive(int r, int c) {
+        /** Condition for border cases, prevents from OutOfBoundsException in array*/
         if (r < 0 || r > height - 1 || c < 0 || c > width - 1) {
             return 0;
         }
         return boardOfCells[r][c].getState() ? 1 : 0;
     }
-
 }
+

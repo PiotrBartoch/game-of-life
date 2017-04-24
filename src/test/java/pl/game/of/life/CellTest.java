@@ -59,24 +59,21 @@ public class CellTest {
 
     @Test
     public void should_be_populated_when_it_is_dead_and_have_three_neighbors() {
-        Cell deadCell = new Cell(false);
-        assertThat(deadCell.getState()).isEqualTo(DEAD);
+        Cell deadCell = new Cell(DEAD);
         deadCell.updateCellState(3);
         assertThat(deadCell.getState()).isEqualTo(ALIVE);
     }
 
     @Test
     public void should_stay_dead_when_it_is_dead_and_have_two_neighbors() {
-        Cell deadCell = new Cell(false);
-        assertThat(deadCell.getState()).isEqualTo(DEAD);
+        Cell deadCell = new Cell(DEAD);
         deadCell.updateCellState(2);
         assertThat(deadCell.getState()).isEqualTo(DEAD);
     }
 
     @Test
     public void should_stay_dead_when_is_dead_and__has_one_or_zero_neighbors() {
-        Cell deadCell = new Cell(false);
-        assertThat(deadCell.getState()).isEqualTo(DEAD);
+        Cell deadCell = new Cell(DEAD);
 
         deadCell.updateCellState(0);
         assertThat(deadCell.getState()).isEqualTo(DEAD);
@@ -87,8 +84,7 @@ public class CellTest {
 
     @Test
     public void should_stay_dead_when_is_dead_and_has_four_or_more_neighbors() {
-        Cell deadCell = new Cell(false);
-        assertThat(deadCell.getState()).isEqualTo(DEAD);
+        Cell deadCell = new Cell(DEAD);
 
         deadCell.updateCellState(4);
         assertThat(deadCell.getState()).isEqualTo(DEAD);
