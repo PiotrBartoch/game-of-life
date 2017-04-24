@@ -1,62 +1,66 @@
 package pl.game.of.life;
 
+import java.util.Arrays;
+
 /**
  * Created by pbartoch on 13.04.2017.
  */
 public class Board {
 
-    Cell[][] boardOfCells;
-    Cell[][] currentBoardState;
+    Cell[][] previousBoard;
+    Cell[][] currentBoard;
 
     int width;
     int height;
 
-    public Board(boolean[][] initialStates) {
+    Board(boolean[][] initialStates) {
         width = initialStates[0].length;
         height = initialStates.length;
-        boardOfCells = new Cell[height][width];
-        currentBoardState = new Cell[height][width];
+        previousBoard = new Cell[height][width];
+        currentBoard = new Cell[height][width];
 
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
                 boolean initialState = initialStates[row][col];
-                boardOfCells[row][col] = new Cell(initialState);
-                currentBoardState[row][col] = new Cell(initialState);
+                previousBoard[row][col] = new Cell(initialState);
+                currentBoard[row][col] = new Cell(initialState);
             }
         }
     }
 
-//    public void runGame(boolean[][] initialStates, int gameLoop) {
-//        Board board = new Board(initialStates);
-//        for (int i = 0; i < gameLoop; i++) {
-//            for ()
-//        }
-//    }
-
-    public boolean[][] getCurrentStates() {
+    boolean[][] getCurrentStates() { // for test now only
         boolean[][] cellsStates = new boolean[height][width];
         for (int row = 0; row < height; row++) {
             for (int col = 0; col < width; col++) {
-                cellsStates[row][col] = currentBoardState[row][col].getState();
+                cellsStates[row][col] = currentBoard[row][col].getState();
             }
         }
         return cellsStates;
     }
 
-    public void update() {
-        for (int row = 0; row < height; row++) {
+    void update() {
+        for (int row = 0; row < height; row++) { // iterates all board
             for (int col = 0; col < width; col++) {
                 int numberOfNeighbors = countNeighbors(row, col);
-                currentBoardState[row][col].updateCellState(numberOfNeighbors);
+                currentBoard[row][col].updateCellState(numberOfNeighbors);
             }
         }
+        overrideOldBoard(); // overrides previous board for next check
 
+    }
+
+    private void overrideOldBoard() {
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
+                previousBoard[row][col] = currentBoard[row][col];
+            }
+        }
     }
 
 
     private int countNeighbors(int row, int col) {
         /** if "main" cell is alive we initiate aliveNeighbors with -1. It's because in algorithm it checks itself too, but should not count itself, so we subtract it from sum. If its dead, it's  zero anyway.*/
-        int aliveNeighbors = boardOfCells[row][col].getState() ? -1 : 0;
+        int aliveNeighbors = previousBoard[row][col].getState() ? -1 : 0;
         /** iterate all cells around main cell*/
         for (int r = row - 1; r <= row + 1; r++) {
             for (int c = col - 1; c <= col + 1; c++) {
@@ -71,7 +75,23 @@ public class Board {
         if (r < 0 || r > height - 1 || c < 0 || c > width - 1) {
             return 0;
         }
-        return boardOfCells[r][c].getState() ? 1 : 0;
+        return previousBoard[r][c].getState() ? 1 : 0;
+    }
+
+    @Override
+    public String toString() {
+        String[][] board = new String[height][width];
+        Cell cell;
+        for (int row = 0; row < height; row++) {
+            for (int col = 0; col < width; col++) {
+                cell = currentBoard[row][col];
+                board[row][col] = cell.toString();
+            }
+        }
+        return Arrays.deepToString(board).replaceAll("\\s", "")
+                .replace("[","")
+                .replace("]","\n")
+                .replace(",","");
     }
 }
 

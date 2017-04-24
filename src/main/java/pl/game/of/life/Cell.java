@@ -24,4 +24,9 @@ public class Cell {
             this.state = numOfNeighbors == 3 ? ALIVE : DEAD;
         }
     }
+
+    @Override
+    public String toString() {
+        return this.state ? "x" : "-";
+    }
 }

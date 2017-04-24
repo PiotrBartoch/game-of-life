@@ -46,9 +46,9 @@ public class BoardTest {
         boolean[][] newState = board.getCurrentStates();
 
         assertThat(newState[0][0]).isEqualTo(DEAD);
-        assertThat(newState[2][2]).isEqualTo(DEAD);
         assertThat(newState[1][1]).isEqualTo(ALIVE);
         assertThat(newState[1][2]).isEqualTo(ALIVE);
+        assertThat(newState[2][2]).isEqualTo(DEAD);
     }
 
     @Test
@@ -98,5 +98,42 @@ public class BoardTest {
 
         // then
         assertThat(board.getCurrentStates()).containsExactly(secondState);
+    }
+
+    @Test
+    public void should_override_previous_board_after_update() {
+        // given
+        boolean[][] initialState = {
+                {O, O, O, O, O, O, O, O, O},
+                {O, O, X, O, O, O, X, O, O},
+                {O, X, O, O, O, O, O, X, O},
+                {O, O, X, O, O, O, O, X, O},
+                {O, O, O, O, O, O, O, O, O},
+        };
+
+
+        boolean[][] secondState = {
+                {O, O, O, O, O, O, O, O, O},
+                {O, O, O, O, O, O, O, O, O},
+                {O, X, X, O, O, O, X, X, O},
+                {O, O, O, O, O, O, O, O, O},
+                {O, O, O, O, O, O, O, O, O},
+
+        };
+        Board board = new Board(initialState);
+
+        // when
+        board.update();
+
+        boolean[][] previousBoardState = new boolean[board.height][board.width];
+
+        for (int row = 0; row < previousBoardState.length; row++) {
+            for (int col = 0; col < previousBoardState[0].length; col++) {
+                previousBoardState[row][col] = board.previousBoard[row][col].getState();
+            }
+        }
+
+        // then
+        assertThat(previousBoardState).containsExactly(secondState);
     }
 }
