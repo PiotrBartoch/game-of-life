@@ -1,13 +1,10 @@
 package pl.game.of.life;
 
-/**
- * Created by pbartoch on 24.04.2017.
- */
 public class GameRunner {
-    public static final boolean DEAD = false;
-    public static final boolean ALIVE = true;
-    public static final boolean X = ALIVE;
-    public static final boolean O = DEAD;
+    private static final boolean DEAD = false;
+    private static final boolean ALIVE = true;
+    private static final boolean X = ALIVE;
+    private static final boolean O = DEAD;
 
     public static void main(String[] args) {
 
@@ -31,13 +28,11 @@ public class GameRunner {
         };
 
         Board board = new Board(initialState);
-        runGame(board, 20);
-
-
+        runGame(board, 100);
     }
 
 
-    public static void runGame(Board board, int gameLoop) {
+    static void runGame(Board board, int gameLoop) {
         for (int i = 0; i < gameLoop; i++) {
             System.out.println("\r");
             System.out.print(board);
